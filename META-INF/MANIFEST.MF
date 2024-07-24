@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Created-By: Apache Maven 3.9.8
+Built-By: anudeep
+Build-Jdk: 22.0.2
+Implementation-Title: simple-java-app
+Implementation-Version: 1.0-SNAPSHOT
+Implementation-Vendor-Id: com.example
+Main-Class: com.example.App
+
