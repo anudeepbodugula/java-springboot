@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/your-repository/java-app.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                script {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+        stage('Docker Build and Push') {
+            steps {
+                script {
+                    def dockerImage = docker.build("your-docker-repo/java-app:${env.BUILD_ID}")
+                    docker.withRegistry('https://your-docker-registry', 'docker-credentials-id') {
+                        dockerImage.push('latest')
+                        dockerImage.push(env.BUILD_ID)
+                    }
+                }
+            }
+        }
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    // Assuming you have kubectl configured and deployed your app in Kubernetes
+                    sh 'kubectl apply -f k8s/deployment.yaml'
+                    sh 'kubectl apply -f k8s/service.yaml'
+                }
+            }
+        }
+    }
+}
